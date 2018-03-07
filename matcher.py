@@ -10,23 +10,31 @@ data = []
 doi_dict = {}
 
 def add_to_doi_dict(doi_dict, doi_data):
-	if doi_data.has_key('subject'):
-		doi_dict[doi_data['DOI'].lower()] = [su for su in doi_data['subject']]
-	else:
-		doi_dict[doi_data['DOI'].lower()] = [None]
+	if not doi_dict.has_key(doi_data['DOI'].lower()):
+		if doi_data.has_key('subject'):	
+			doi_dict[doi_data['DOI'].lower()] = [su for su in doi_data['subject']]
+		else:
+			doi_dict[doi_data['DOI'].lower()] = [None]
 
 	return doi_dict
 
-print 'Building dictionary...'
-with open('../data_processed/DOI/DOIs-WW-hydrated.json', 'r') as json_in:
+print 'Building dictionaries...'
+with open('../data_processed/DOI/DOI-WW-hydrated.json', 'r') as json_in:
 	for line in json_in:
 		doi_data = json.loads(line)
 		add_to_doi_dict(doi_dict, doi_data)
 
+with open('../data_processed/DOI/DOI-NL-hydrated.json', 'r') as json_in:
+	for line in json_in:
+		doi_data = json.loads(line)
+		add_to_doi_dict(doi_dict, doi_data)
+
+print 'Loaded %i DOI in dictionary' % len(doi_dict)
+
 subject_count = Counter()
 t0 = time.time()
 
-with open('DOI-all.csv', 'r') as csv_in:
+with open('../data_processed/DOI-all.csv', 'r') as csv_in:
 	reader = csv.reader(csv_in, delimiter='\t')
 
 	for doi, count in reader:
@@ -56,13 +64,9 @@ with open('DOI-all.csv', 'r') as csv_in:
 				subjects = doi_dict[doi]
 
 				# add to data_file
-				with open('DOIs-WW-hydrated.json', 'a') as json_out:
+				with open('../data_processed/DOIs-WW-hydrated.json', 'a') as json_out:
 					json.dump(results, json_out)
 					json_out.write('\n')
 			else:
 				print '\tNo CrossRef data for DOI <%s>.' % (doi)
 				subjects = [ None ]
-
-		for subject in subjects:
-			subject_count[subject] += int(count)
-		#print row 
