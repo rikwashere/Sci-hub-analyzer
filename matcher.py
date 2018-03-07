@@ -64,7 +64,7 @@ with open('../data_processed/DOI-all.csv', 'r') as csv_in:
 				subjects = doi_dict[doi]
 
 				# add to data_file
-				with open('../data_processed/DOIs-WW-hydrated.json', 'a') as json_out:
+				with open('../data_processed/DOI/DOI-WW-hydrated.json', 'a') as json_out:
 					json.dump(results, json_out)
 					json_out.write('\n')
 			else:
