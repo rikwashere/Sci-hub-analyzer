@@ -16,20 +16,20 @@ def write(chunk):
 		timestamp = row[0]
 		timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
 		date_str = timestamp.strftime('%Y-%m-%d')
-		doi = row[1]
+		
+		doi = row[1].lower()
 		country = row[4]
 		row[0] = date_str
-
 		row_out = row
 
-		if country == 'N/A' or country == 'Netherlands':
-			continue
+		if country == 'N/A':
+			country = 'unknown'
 
-		with open('data/countries/%s.csv' % country, 'a') as csv_out:
+		with open('../data_processed/countries/%s.csv' % country, 'a') as csv_out:
 			writer = csv.writer(csv_out, delimiter='\t')
 			writer.writerow(row_out)	
 
-with open('data.tab', 'r') as fi:
+with open('../data_raw/2017.statistics.tab', 'r') as fi:
 	reader = csv.reader(fi, delimiter='\t')
 	chunk = []
 	chunk_c = 1

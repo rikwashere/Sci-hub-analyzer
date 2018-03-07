@@ -18,7 +18,7 @@ def add_to_doi_dict(doi_dict, doi_data):
 	return doi_dict
 
 print 'Building dictionary...'
-with open('DOIs-WW-hydrated.json', 'r') as json_in:
+with open('../data_processed/DOI/DOIs-WW-hydrated.json', 'r') as json_in:
 	for line in json_in:
 		doi_data = json.loads(line)
 		add_to_doi_dict(doi_dict, doi_data)
